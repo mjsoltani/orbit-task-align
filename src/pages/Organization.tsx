@@ -15,87 +15,87 @@ const Organization = () => {
   const positions = [
     {
       id: 1,
-      name: "Production Line Supervisor",
-      department: "Production",
-      assignedEmployee: "John Smith",
+      name: "سرپرست خط تولید",
+      department: "تولید",
+      assignedEmployee: "محمد احمدی",
       routineTasks: 4,
-      parentPosition: "Production Manager"
+      parentPosition: "مدیر تولید"
     },
     {
       id: 2,
-      name: "Quality Control Inspector",
-      department: "Quality",
-      assignedEmployee: "Maria Garcia",
+      name: "بازرس کنترل کیفیت",
+      department: "کیفیت",
+      assignedEmployee: "مریم رضایی",
       routineTasks: 3,
-      parentPosition: "Quality Manager"
+      parentPosition: "مدیر کیفیت"
     },
     {
       id: 3,
-      name: "Production Manager",
-      department: "Production",
-      assignedEmployee: "David Johnson",
+      name: "مدیر تولید",
+      department: "تولید",
+      assignedEmployee: "علی محمدی",
       routineTasks: 2,
-      parentPosition: "Plant Director"
+      parentPosition: "مدیر کارخانه"
     },
     {
       id: 4,
-      name: "Maintenance Technician",
-      department: "Maintenance",
-      assignedEmployee: "Mike Wilson",
+      name: "تکنسین تعمیرات",
+      department: "تعمیرات",
+      assignedEmployee: "حسن کریمی",
       routineTasks: 5,
-      parentPosition: "Maintenance Supervisor"
+      parentPosition: "سرپرست تعمیرات"
     }
   ];
 
   const routineTasks = [
     {
       id: 1,
-      name: "Daily Equipment Safety Check",
-      position: "Production Line Supervisor",
-      period: "Daily",
-      checklist: ["Check emergency stops", "Verify safety guards", "Test warning lights"],
-      description: "Comprehensive safety inspection of production equipment"
+      name: "بررسی ایمنی روزانه تجهیزات",
+      position: "سرپرست خط تولید",
+      period: "روزانه",
+      checklist: ["بررسی کلیدهای اضطراری", "تأیید محافظ‌های ایمنی", "تست چراغ‌های هشدار"],
+      description: "بازرسی جامع ایمنی تجهیزات تولید"
     },
     {
       id: 2,
-      name: "Quality Control Inspection",
-      position: "Quality Control Inspector",
-      period: "Daily",
-      checklist: ["Sample product quality", "Check dimensions", "Document results"],
-      description: "Random quality sampling and testing procedures"
+      name: "بازرسی کنترل کیفیت",
+      position: "بازرس کنترل کیفیت",
+      period: "روزانه",
+      checklist: ["نمونه‌گیری کیفیت محصول", "بررسی ابعاد", "ثبت نتایج"],
+      description: "روش‌های نمونه‌گیری تصادفی و آزمایش کیفیت"
     },
     {
       id: 3,
-      name: "Weekly Production Report",
-      position: "Production Manager",
-      period: "Weekly",
-      checklist: ["Compile metrics", "Analyze trends", "Submit report"],
-      description: "Weekly production performance analysis and reporting"
+      name: "گزارش تولید هفتگی",
+      position: "مدیر تولید",
+      period: "هفتگی",
+      checklist: ["جمع‌آوری معیارها", "تحلیل روندها", "ارسال گزارش"],
+      description: "تحلیل عملکرد تولید هفتگی و گزارش‌دهی"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">HR & Organization</h1>
-            <p className="text-muted-foreground">Manage organizational structure and routine tasks</p>
+            <h1 className="text-3xl font-bold">منابع انسانی و سازمان</h1>
+            <p className="text-muted-foreground">مدیریت ساختار سازمانی و وظایف روتین</p>
           </div>
           <Button className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
-            Add New
+            افزودن جدید
           </Button>
         </div>
 
-        <div className="flex space-x-1 bg-muted p-1 rounded-lg w-fit">
+        <div className="flex space-x-1 bg-muted p-1 rounded-lg w-fit space-x-reverse">
           <Button
             variant={activeTab === "positions" ? "default" : "ghost"}
             onClick={() => setActiveTab("positions")}
             className="flex items-center gap-2"
           >
             <Building className="h-4 w-4" />
-            Positions
+            پست‌های سازمانی
           </Button>
           <Button
             variant={activeTab === "tasks" ? "default" : "ghost"}
@@ -103,7 +103,7 @@ const Organization = () => {
             className="flex items-center gap-2"
           >
             <Settings className="h-4 w-4" />
-            Routine Tasks
+            وظایف روتین
           </Button>
           <Button
             variant={activeTab === "chart" ? "default" : "ghost"}
@@ -111,7 +111,7 @@ const Organization = () => {
             className="flex items-center gap-2"
           >
             <Users className="h-4 w-4" />
-            Org Chart
+            چارت سازمانی
           </Button>
         </div>
 
@@ -119,8 +119,8 @@ const Organization = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Job Positions</CardTitle>
-                <CardDescription>Manage organizational positions and assignments</CardDescription>
+                <CardTitle>پست‌های شغلی</CardTitle>
+                <CardDescription>مدیریت پست‌های سازمانی و تخصیص‌ها</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {positions.map((position) => (
@@ -131,19 +131,19 @@ const Organization = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Assigned to:</span>
+                        <span className="text-muted-foreground">تخصیص داده شده به:</span>
                         <p className="font-medium">{position.assignedEmployee}</p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Reports to:</span>
+                        <span className="text-muted-foreground">گزارش به:</span>
                         <p className="font-medium">{position.parentPosition}</p>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">
-                        {position.routineTasks} routine tasks assigned
+                        {position.routineTasks} وظیفه روتین تخصیص یافته
                       </span>
-                      <Button variant="ghost" size="sm">Edit</Button>
+                      <Button variant="ghost" size="sm">ویرایش</Button>
                     </div>
                   </div>
                 ))}
@@ -152,42 +152,42 @@ const Organization = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Create New Position</CardTitle>
-                <CardDescription>Add a new job position to the organization</CardDescription>
+                <CardTitle>ایجاد پست جدید</CardTitle>
+                <CardDescription>افزودن پست شغلی جدید به سازمان</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="positionName">Position Name</Label>
-                  <Input id="positionName" placeholder="e.g., Senior Quality Analyst" />
+                  <Label htmlFor="positionName">نام پست</Label>
+                  <Input id="positionName" placeholder="مثلاً تحلیلگر ارشد کیفیت" />
                 </div>
                 <div>
-                  <Label htmlFor="department">Department</Label>
+                  <Label htmlFor="department">بخش</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select department" />
+                      <SelectValue placeholder="انتخاب بخش" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="production">Production</SelectItem>
-                      <SelectItem value="quality">Quality</SelectItem>
-                      <SelectItem value="maintenance">Maintenance</SelectItem>
-                      <SelectItem value="admin">Administration</SelectItem>
+                      <SelectItem value="production">تولید</SelectItem>
+                      <SelectItem value="quality">کیفیت</SelectItem>
+                      <SelectItem value="maintenance">تعمیرات</SelectItem>
+                      <SelectItem value="admin">اداری</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="reportsTo">Reports To</Label>
+                  <Label htmlFor="reportsTo">گزارش به</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select parent position" />
+                      <SelectValue placeholder="انتخاب پست والد" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="production-manager">Production Manager</SelectItem>
-                      <SelectItem value="quality-manager">Quality Manager</SelectItem>
-                      <SelectItem value="plant-director">Plant Director</SelectItem>
+                      <SelectItem value="production-manager">مدیر تولید</SelectItem>
+                      <SelectItem value="quality-manager">مدیر کیفیت</SelectItem>
+                      <SelectItem value="plant-director">مدیر کارخانه</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-full">Create Position</Button>
+                <Button className="w-full">ایجاد پست</Button>
               </CardContent>
             </Card>
           </div>
@@ -197,8 +197,8 @@ const Organization = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Routine Tasks</CardTitle>
-                <CardDescription>Tasks automatically assigned based on job positions</CardDescription>
+                <CardTitle>وظایف روتین</CardTitle>
+                <CardDescription>وظایف خودکار تخصیص یافته بر اساس پست‌های شغلی</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {routineTasks.map((task) => (
@@ -209,18 +209,18 @@ const Organization = () => {
                     </div>
                     <p className="text-sm text-muted-foreground">{task.description}</p>
                     <div>
-                      <span className="text-sm font-medium text-muted-foreground">Assigned to:</span>
+                      <span className="text-sm font-medium text-muted-foreground">تخصیص به:</span>
                       <p className="text-sm">{task.position}</p>
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-muted-foreground">Checklist:</span>
-                      <ul className="text-sm list-disc list-inside ml-2 space-y-1">
+                      <span className="text-sm font-medium text-muted-foreground">چک‌لیست:</span>
+                      <ul className="text-sm list-disc list-inside mr-2 space-y-1">
                         {task.checklist.map((item, index) => (
                           <li key={index}>{item}</li>
                         ))}
                       </ul>
                     </div>
-                    <Button variant="ghost" size="sm">Edit Task</Button>
+                    <Button variant="ghost" size="sm">ویرایش وظیفه</Button>
                   </div>
                 ))}
               </CardContent>
@@ -228,46 +228,46 @@ const Organization = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Create Routine Task</CardTitle>
-                <CardDescription>Define a new routine task for a job position</CardDescription>
+                <CardTitle>ایجاد وظیفه روتین</CardTitle>
+                <CardDescription>تعریف وظیفه روتین جدید برای یک پست شغلی</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="taskName">Task Name</Label>
-                  <Input id="taskName" placeholder="e.g., Daily Calibration Check" />
+                  <Label htmlFor="taskName">نام وظیفه</Label>
+                  <Input id="taskName" placeholder="مثلاً بررسی کالیبراسیون روزانه" />
                 </div>
                 <div>
-                  <Label htmlFor="position">Assign to Position</Label>
+                  <Label htmlFor="position">تخصیص به پست</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select position" />
+                      <SelectValue placeholder="انتخاب پست" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="supervisor">Production Line Supervisor</SelectItem>
-                      <SelectItem value="inspector">Quality Control Inspector</SelectItem>
-                      <SelectItem value="technician">Maintenance Technician</SelectItem>
+                      <SelectItem value="supervisor">سرپرست خط تولید</SelectItem>
+                      <SelectItem value="inspector">بازرس کنترل کیفیت</SelectItem>
+                      <SelectItem value="technician">تکنسین تعمیرات</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="period">Frequency</Label>
+                  <Label htmlFor="period">دوره تکرار</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select frequency" />
+                      <SelectValue placeholder="انتخاب دوره" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="quarterly">Quarterly</SelectItem>
+                      <SelectItem value="daily">روزانه</SelectItem>
+                      <SelectItem value="weekly">هفتگی</SelectItem>
+                      <SelectItem value="monthly">ماهانه</SelectItem>
+                      <SelectItem value="quarterly">فصلی</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea id="description" placeholder="Detailed task instructions..." />
+                  <Label htmlFor="description">توضیحات</Label>
+                  <Textarea id="description" placeholder="دستورالعمل دقیق وظیفه..." />
                 </div>
-                <Button className="w-full">Create Task</Button>
+                <Button className="w-full">ایجاد وظیفه</Button>
               </CardContent>
             </Card>
           </div>
@@ -276,40 +276,40 @@ const Organization = () => {
         {activeTab === "chart" && (
           <Card>
             <CardHeader>
-              <CardTitle>Organizational Chart</CardTitle>
-              <CardDescription>Visual representation of reporting relationships</CardDescription>
+              <CardTitle>چارت سازمانی</CardTitle>
+              <CardDescription>نمای بصری روابط گزارش‌دهی</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col items-center space-y-6 p-6">
                 <div className="bg-primary/10 p-4 rounded-lg border-2 border-primary/20">
                   <div className="text-center">
-                    <h3 className="font-semibold">Plant Director</h3>
-                    <p className="text-sm text-muted-foreground">Sarah Johnson</p>
+                    <h3 className="font-semibold">مدیر کارخانه</h3>
+                    <p className="text-sm text-muted-foreground">سارا محمدی</p>
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-secondary/50 p-4 rounded-lg border">
                     <div className="text-center">
-                      <h4 className="font-semibold">Production Manager</h4>
-                      <p className="text-sm text-muted-foreground">David Johnson</p>
-                      <Badge variant="outline" className="mt-2">Production</Badge>
+                      <h4 className="font-semibold">مدیر تولید</h4>
+                      <p className="text-sm text-muted-foreground">علی محمدی</p>
+                      <Badge variant="outline" className="mt-2">تولید</Badge>
                     </div>
                   </div>
                   
                   <div className="bg-secondary/50 p-4 rounded-lg border">
                     <div className="text-center">
-                      <h4 className="font-semibold">Quality Manager</h4>
-                      <p className="text-sm text-muted-foreground">Lisa Chen</p>
-                      <Badge variant="outline" className="mt-2">Quality</Badge>
+                      <h4 className="font-semibold">مدیر کیفیت</h4>
+                      <p className="text-sm text-muted-foreground">لیلا حسینی</p>
+                      <Badge variant="outline" className="mt-2">کیفیت</Badge>
                     </div>
                   </div>
                   
                   <div className="bg-secondary/50 p-4 rounded-lg border">
                     <div className="text-center">
-                      <h4 className="font-semibold">Maintenance Supervisor</h4>
-                      <p className="text-sm text-muted-foreground">Robert Brown</p>
-                      <Badge variant="outline" className="mt-2">Maintenance</Badge>
+                      <h4 className="font-semibold">سرپرست تعمیرات</h4>
+                      <p className="text-sm text-muted-foreground">رضا کریمی</p>
+                      <Badge variant="outline" className="mt-2">تعمیرات</Badge>
                     </div>
                   </div>
                 </div>
@@ -317,15 +317,15 @@ const Organization = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-muted/50 p-3 rounded-lg border">
                     <div className="text-center">
-                      <h5 className="font-medium">Production Line Supervisor</h5>
-                      <p className="text-sm text-muted-foreground">John Smith</p>
+                      <h5 className="font-medium">سرپرست خط تولید</h5>
+                      <p className="text-sm text-muted-foreground">محمد احمدی</p>
                     </div>
                   </div>
                   
                   <div className="bg-muted/50 p-3 rounded-lg border">
                     <div className="text-center">
-                      <h5 className="font-medium">Quality Control Inspector</h5>
-                      <p className="text-sm text-muted-foreground">Maria Garcia</p>
+                      <h5 className="font-medium">بازرس کنترل کیفیت</h5>
+                      <p className="text-sm text-muted-foreground">مریم رضایی</p>
                     </div>
                   </div>
                 </div>

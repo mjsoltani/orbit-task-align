@@ -7,96 +7,96 @@ import { CheckCircle, Clock, Target, Users, TrendingUp, AlertCircle } from "luci
 
 const Dashboard = () => {
   const routineTasks = [
-    { id: 1, name: "Daily Equipment Safety Check", completed: true, position: "Production Line Supervisor" },
-    { id: 2, name: "Quality Control Inspection", completed: false, position: "Quality Control Inspector" },
-    { id: 3, name: "Team Morning Briefing", completed: true, position: "Production Line Supervisor" },
-    { id: 4, name: "Inventory Level Review", completed: false, position: "Production Line Supervisor" }
+    { id: 1, name: "بررسی ایمنی روزانه تجهیزات", completed: true, position: "سرپرست خط تولید" },
+    { id: 2, name: "بازرسی کنترل کیفیت", completed: false, position: "بازرس کنترل کیفیت" },
+    { id: 3, name: "جلسه صبحگاهی تیم", completed: true, position: "سرپرست خط تولید" },
+    { id: 4, name: "بررسی سطح موجودی", completed: false, position: "سرپرست خط تولید" }
   ];
 
   const specialTasks = [
     { 
       id: 1, 
-      name: "Install new sensor system on Line 1", 
-      dueDate: "2024-01-15", 
-      status: "In Progress",
-      linkedKR: "Reduce line downtime from 15 mins/day to 5 mins/day"
+      name: "نصب سیستم سنسور جدید روی خط ۱", 
+      dueDate: "۱۴۰۳/۱۰/۲۵", 
+      status: "در حال انجام",
+      linkedKR: "کاهش زمان توقف خط از ۱۵ دقیقه/روز به ۵ دقیقه/روز"
     },
     { 
       id: 2, 
-      name: "Update safety procedures documentation", 
-      dueDate: "2024-01-20", 
-      status: "To Do",
-      linkedKR: "Improve production line 1 efficiency"
+      name: "به‌روزرسانی مستندات رویه‌های ایمنی", 
+      dueDate: "۱۴۰۳/۱۰/۳۰", 
+      status: "انجام نشده",
+      linkedKR: "بهبود کارایی خط تولید ۱"
     }
   ];
 
   const objectives = [
     {
       id: 1,
-      title: "Improve Production Line 1 Efficiency",
+      title: "بهبود کارایی خط تولید ۱",
       progress: 65,
       keyResults: [
-        { name: "Reduce line downtime", target: "5 mins/day", current: "8 mins/day", progress: 70 },
-        { name: "Decrease material waste", target: "3%", current: "1.8%", progress: 60 }
+        { name: "کاهش زمان توقف خط", target: "۵ دقیقه/روز", current: "۸ دقیقه/روز", progress: 70 },
+        { name: "کاهش ضایعات مواد", target: "۳٪", current: "۱.۸٪", progress: 60 }
       ]
     }
   ];
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Employee Dashboard</h1>
-            <p className="text-muted-foreground">Good morning! Here's what needs your attention today.</p>
+            <h1 className="text-3xl font-bold">داشبورد کارمند</h1>
+            <p className="text-muted-foreground">صبح بخیر! در ادامه کارهایی که نیاز به توجه شما دارند.</p>
           </div>
           <Badge variant="outline" className="px-3 py-1">
-            Production Line Supervisor
+            سرپرست خط تولید
           </Badge>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Today's Tasks</CardTitle>
+              <CardTitle className="text-sm font-medium">وظایف امروز</CardTitle>
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2/4</div>
-              <p className="text-xs text-muted-foreground">Completed</p>
+              <div className="text-2xl font-bold">۲/۴</div>
+              <p className="text-xs text-muted-foreground">تکمیل شده</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Special Tasks</CardTitle>
+              <CardTitle className="text-sm font-medium">وظایف ویژه</CardTitle>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2</div>
-              <p className="text-xs text-muted-foreground">In Progress</p>
+              <div className="text-2xl font-bold">۲</div>
+              <p className="text-xs text-muted-foreground">در حال انجام</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Goals</CardTitle>
+              <CardTitle className="text-sm font-medium">اهداف تیم</CardTitle>
               <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">65%</div>
-              <p className="text-xs text-muted-foreground">Progress</p>
+              <div className="text-2xl font-bold">۶۵٪</div>
+              <p className="text-xs text-muted-foreground">پیشرفت</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Productivity</CardTitle>
+              <CardTitle className="text-sm font-medium">بهره‌وری</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+12%</div>
-              <p className="text-xs text-muted-foreground">This week</p>
+              <div className="text-2xl font-bold">+۱۲٪</div>
+              <p className="text-xs text-muted-foreground">این هفته</p>
             </CardContent>
           </Card>
         </div>
@@ -106,9 +106,9 @@ const Dashboard = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5" />
-                My Routine Tasks
+                وظایف روتین من
               </CardTitle>
-              <CardDescription>Daily responsibilities for your position</CardDescription>
+              <CardDescription>مسئولیت‌های روزانه مربوط به پست شما</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {routineTasks.map((task) => (
@@ -128,7 +128,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <Badge variant="secondary" className="text-xs">
-                    Daily
+                    روزانه
                   </Badge>
                 </div>
               ))}
@@ -139,22 +139,22 @@ const Dashboard = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
-                My Special Tasks
+                وظایف ویژه من
               </CardTitle>
-              <CardDescription>Project tasks assigned to you</CardDescription>
+              <CardDescription>وظایف پروژه‌ای تخصیص یافته به شما</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {specialTasks.map((task) => (
                 <div key={task.id} className="p-3 rounded-lg border space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium">{task.name}</h4>
-                    <Badge variant={task.status === "In Progress" ? "default" : "secondary"}>
+                    <Badge variant={task.status === "در حال انجام" ? "default" : "secondary"}>
                       {task.status}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">Due: {task.dueDate}</p>
+                  <p className="text-sm text-muted-foreground">مهلت: {task.dueDate}</p>
                   <div className="bg-muted/50 p-2 rounded text-xs">
-                    <strong>Linked Goal:</strong> {task.linkedKR}
+                    <strong>هدف مرتبط:</strong> {task.linkedKR}
                   </div>
                 </div>
               ))}
@@ -166,16 +166,16 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5" />
-              My Goals & Impact
+              اهداف و تأثیر من
             </CardTitle>
-            <CardDescription>How your work contributes to company objectives</CardDescription>
+            <CardDescription>نحوه مشارکت کار شما در اهداف شرکت</CardDescription>
           </CardHeader>
           <CardContent>
             {objectives.map((objective) => (
               <div key={objective.id} className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">{objective.title}</h3>
-                  <Badge variant="outline">{objective.progress}% Complete</Badge>
+                  <Badge variant="outline">{objective.progress}٪ تکمیل</Badge>
                 </div>
                 <Progress value={objective.progress} className="h-2" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -183,8 +183,8 @@ const Dashboard = () => {
                     <div key={index} className="p-3 rounded-lg border space-y-2">
                       <h4 className="font-medium text-sm">{kr.name}</h4>
                       <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Current: {kr.current}</span>
-                        <span>Target: {kr.target}</span>
+                        <span>وضعیت فعلی: {kr.current}</span>
+                        <span>هدف: {kr.target}</span>
                       </div>
                       <Progress value={kr.progress} className="h-1" />
                     </div>

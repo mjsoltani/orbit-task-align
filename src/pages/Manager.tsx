@@ -13,8 +13,8 @@ const Manager = () => {
   const teamMembers = [
     {
       id: 1,
-      name: "John Smith",
-      position: "Production Line Supervisor",
+      name: "محمد احمدی",
+      position: "سرپرست خط تولید",
       routineTasksCompleted: 3,
       routineTasksTotal: 4,
       specialTasks: 2,
@@ -23,8 +23,8 @@ const Manager = () => {
     },
     {
       id: 2,
-      name: "Maria Garcia",
-      position: "Quality Control Inspector",
+      name: "مریم رضایی",
+      position: "بازرس کنترل کیفیت",
       routineTasksCompleted: 4,
       routineTasksTotal: 4,
       specialTasks: 1,
@@ -33,8 +33,8 @@ const Manager = () => {
     },
     {
       id: 3,
-      name: "Mike Wilson",
-      position: "Maintenance Technician",
+      name: "حسن کریمی",
+      position: "تکنسین تعمیرات",
       routineTasksCompleted: 2,
       routineTasksTotal: 5,
       specialTasks: 1,
@@ -43,8 +43,8 @@ const Manager = () => {
     },
     {
       id: 4,
-      name: "Sarah Johnson",
-      position: "Production Operator",
+      name: "سارا محمدی",
+      position: "اپراتور تولید",
       routineTasksCompleted: 5,
       routineTasksTotal: 5,
       specialTasks: 0,
@@ -56,47 +56,47 @@ const Manager = () => {
   const objectives = [
     {
       id: 1,
-      title: "Improve Production Line 1 Efficiency",
+      title: "بهبود کارایی خط تولید ۱",
       progress: 65,
       teamContribution: [
-        { member: "John Smith", contribution: 40 },
-        { member: "Mike Wilson", contribution: 25 },
-        { member: "Maria Garcia", contribution: 20 }
+        { member: "محمد احمدی", contribution: 40 },
+        { member: "حسن کریمی", contribution: 25 },
+        { member: "مریم رضایی", contribution: 20 }
       ]
     },
     {
       id: 2,
-      title: "Enhance Quality Control Standards",
+      title: "ارتقای استانداردهای کنترل کیفیت",
       progress: 45,
       teamContribution: [
-        { member: "Maria Garcia", contribution: 60 },
-        { member: "John Smith", contribution: 25 }
+        { member: "مریم رضایی", contribution: 60 },
+        { member: "محمد احمدی", contribution: 25 }
       ]
     }
   ];
 
   const recentActivity = [
-    { user: "John Smith", action: "Completed Daily Equipment Safety Check", time: "2 hours ago" },
-    { user: "Maria Garcia", action: "Updated Quality Control Inspection report", time: "3 hours ago" },
-    { user: "Mike Wilson", action: "Started Install new sensor system on Line 1", time: "1 day ago" },
-    { user: "Sarah Johnson", action: "Completed all routine tasks", time: "1 day ago" }
+    { user: "محمد احمدی", action: "بررسی ایمنی روزانه تجهیزات را تکمیل کرد", time: "۲ ساعت پیش" },
+    { user: "مریم رضایی", action: "گزارش بازرسی کنترل کیفیت را به‌روزرسانی کرد", time: "۳ ساعت پیش" },
+    { user: "حسن کریمی", action: "نصب سیستم سنسور جدید روی خط ۱ را شروع کرد", time: "۱ روز پیش" },
+    { user: "سارا محمدی", action: "تمام وظایف روتین را تکمیل کرد", time: "۱ روز پیش" }
   ];
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Manager Dashboard</h1>
-            <p className="text-muted-foreground">Team overview and performance management</p>
+            <h1 className="text-3xl font-bold">داشبورد مدیر</h1>
+            <p className="text-muted-foreground">نمای کلی تیم و مدیریت عملکرد</p>
           </div>
           <div className="flex items-center gap-4">
             <Select value={selectedTeamMember} onValueChange={setSelectedTeamMember}>
               <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select team member" />
+                <SelectValue placeholder="انتخاب عضو تیم" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Team Members</SelectItem>
+                <SelectItem value="all">همه اعضای تیم</SelectItem>
                 {teamMembers.map((member) => (
                   <SelectItem key={member.id} value={member.id.toString()}>
                     {member.name}
@@ -110,51 +110,51 @@ const Manager = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+              <CardTitle className="text-sm font-medium">اعضای تیم</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{teamMembers.length}</div>
-              <p className="text-xs text-muted-foreground">Direct reports</p>
+              <p className="text-xs text-muted-foreground">گزارش مستقیم</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Avg Productivity</CardTitle>
+              <CardTitle className="text-sm font-medium">میانگین بهره‌وری</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {Math.round(teamMembers.reduce((sum, member) => sum + member.productivity, 0) / teamMembers.length)}%
+                {Math.round(teamMembers.reduce((sum, member) => sum + member.productivity, 0) / teamMembers.length)}٪
               </div>
-              <p className="text-xs text-muted-foreground">This week</p>
+              <p className="text-xs text-muted-foreground">این هفته</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Overdue Tasks</CardTitle>
+              <CardTitle className="text-sm font-medium">وظایف عقب‌افتاده</CardTitle>
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {teamMembers.reduce((sum, member) => sum + member.overdueTasks, 0)}
               </div>
-              <p className="text-xs text-muted-foreground">Needs attention</p>
+              <p className="text-xs text-muted-foreground">نیاز به توجه</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Goals</CardTitle>
+              <CardTitle className="text-sm font-medium">اهداف تیم</CardTitle>
               <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {Math.round(objectives.reduce((sum, obj) => sum + obj.progress, 0) / objectives.length)}%
+                {Math.round(objectives.reduce((sum, obj) => sum + obj.progress, 0) / objectives.length)}٪
               </div>
-              <p className="text-xs text-muted-foreground">Average progress</p>
+              <p className="text-xs text-muted-foreground">میانگین پیشرفت</p>
             </CardContent>
           </Card>
         </div>
@@ -164,9 +164,9 @@ const Manager = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Team Performance
+                عملکرد تیم
               </CardTitle>
-              <CardDescription>Individual team member task completion and productivity</CardDescription>
+              <CardDescription>تکمیل وظایف فردی اعضای تیم و بهره‌وری</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {teamMembers.map((member) => (
@@ -176,9 +176,9 @@ const Manager = () => {
                       <h4 className="font-semibold">{member.name}</h4>
                       <p className="text-sm text-muted-foreground">{member.position}</p>
                     </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold">{member.productivity}%</div>
-                      <p className="text-xs text-muted-foreground">Productivity</p>
+                    <div className="text-left">
+                      <div className="text-lg font-bold">{member.productivity}٪</div>
+                      <p className="text-xs text-muted-foreground">بهره‌وری</p>
                     </div>
                   </div>
                   
@@ -187,24 +187,24 @@ const Manager = () => {
                       <div className="font-medium">
                         {member.routineTasksCompleted}/{member.routineTasksTotal}
                       </div>
-                      <p className="text-muted-foreground">Routine</p>
+                      <p className="text-muted-foreground">روتین</p>
                     </div>
                     <div className="text-center">
                       <div className="font-medium">{member.specialTasks}</div>
-                      <p className="text-muted-foreground">Special</p>
+                      <p className="text-muted-foreground">ویژه</p>
                     </div>
                     <div className="text-center">
                       <div className={`font-medium ${member.overdueTasks > 0 ? 'text-destructive' : 'text-muted-foreground'}`}>
                         {member.overdueTasks}
                       </div>
-                      <p className="text-muted-foreground">Overdue</p>
+                      <p className="text-muted-foreground">عقب‌افتاده</p>
                     </div>
                   </div>
 
                   <Progress value={member.productivity} className="h-2" />
                   
                   <div className="flex justify-end">
-                    <Button variant="ghost" size="sm">View Details</Button>
+                    <Button variant="ghost" size="sm">مشاهده جزئیات</Button>
                   </div>
                 </div>
               ))}
@@ -215,21 +215,21 @@ const Manager = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5" />
-                Team Goal Progress
+                پیشرفت اهداف تیم
               </CardTitle>
-              <CardDescription>Progress on strategic objectives and team contributions</CardDescription>
+              <CardDescription>پیشرفت اهداف استراتژیک و مشارکت تیم</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {objectives.map((objective) => (
                 <div key={objective.id} className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h4 className="font-semibold">{objective.title}</h4>
-                    <Badge variant="outline">{objective.progress}%</Badge>
+                    <Badge variant="outline">{objective.progress}٪</Badge>
                   </div>
                   <Progress value={objective.progress} className="h-2" />
                   
                   <div className="space-y-2">
-                    <h5 className="text-sm font-medium text-muted-foreground">Team Contributions:</h5>
+                    <h5 className="text-sm font-medium text-muted-foreground">مشارکت اعضای تیم:</h5>
                     {objective.teamContribution.map((contrib, index) => (
                       <div key={index} className="flex items-center justify-between text-sm">
                         <span>{contrib.member}</span>
@@ -240,7 +240,7 @@ const Manager = () => {
                               style={{ width: `${contrib.contribution}%` }}
                             />
                           </div>
-                          <span className="text-muted-foreground">{contrib.contribution}%</span>
+                          <span className="text-muted-foreground">{contrib.contribution}٪</span>
                         </div>
                       </div>
                     ))}
@@ -256,14 +256,14 @@ const Manager = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
-                Recent Activity
+                فعالیت‌های اخیر
               </CardTitle>
-              <CardDescription>Latest team member actions and updates</CardDescription>
+              <CardDescription>آخرین اقدامات و به‌روزرسانی‌های اعضای تیم</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start space-x-3 p-3 rounded-lg bg-muted/30">
+                  <div key={index} className="flex items-start space-x-3 space-x-reverse p-3 rounded-lg bg-muted/30">
                     <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                     <div className="flex-1 space-y-1">
                       <p className="text-sm">
@@ -281,26 +281,26 @@ const Manager = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BarChart3 className="h-5 w-5" />
-                Workload Distribution
+                توزیع بار کاری
               </CardTitle>
-              <CardDescription>Task distribution across team members</CardDescription>
+              <CardDescription>توزیع وظایف در بین اعضای تیم</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {teamMembers.map((member) => {
                   const totalTasks = member.routineTasksTotal + member.specialTasks;
-                  const workloadPercentage = Math.min((totalTasks / 8) * 100, 100); // Assuming 8 tasks is 100% capacity
+                  const workloadPercentage = Math.min((totalTasks / 8) * 100, 100); // فرض ۸ وظیفه به عنوان ۱۰۰٪ ظرفیت
                   
                   return (
                     <div key={member.id} className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <span className="font-medium">{member.name}</span>
-                        <span className="text-muted-foreground">{totalTasks} tasks</span>
+                        <span className="text-muted-foreground">{totalTasks} وظیفه</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Progress value={workloadPercentage} className="flex-1 h-2" />
                         <span className="text-xs text-muted-foreground w-12">
-                          {Math.round(workloadPercentage)}%
+                          {Math.round(workloadPercentage)}٪
                         </span>
                       </div>
                     </div>
@@ -309,11 +309,11 @@ const Manager = () => {
               </div>
               
               <div className="mt-6 p-3 bg-muted/50 rounded-lg">
-                <h5 className="font-medium text-sm mb-2">Recommendations:</h5>
+                <h5 className="font-medium text-sm mb-2">پیشنهادات:</h5>
                 <ul className="text-xs text-muted-foreground space-y-1">
-                  <li>• Consider redistributing tasks from Mike Wilson</li>
-                  <li>• Sarah Johnson has capacity for additional responsibilities</li>
-                  <li>• Monitor overdue tasks closely</li>
+                  <li>• بازتوزیع وظایف از حسن کریمی در نظر گرفته شود</li>
+                  <li>• سارا محمدی ظرفیت پذیرش مسئولیت‌های اضافی را دارد</li>
+                  <li>• وظایف عقب‌افتاده را با دقت پیگیری کنید</li>
                 </ul>
               </div>
             </CardContent>

@@ -16,188 +16,188 @@ const Tasks = () => {
   const tasks = [
     {
       id: 1,
-      name: "Install new sensor system on Line 1",
-      description: "Replace old sensors with IoT-enabled monitoring system",
-      dueDate: "2024-01-15",
-      priority: "High",
-      status: "In Progress",
-      assignedTo: ["John Smith", "Mike Wilson"],
-      linkedKR: "Reduce line downtime from 15 mins/day to 5 mins/day",
+      name: "نصب سیستم سنسور جدید روی خط ۱",
+      description: "جایگزینی سنسورهای قدیمی با سیستم مانیتورینگ IoT",
+      dueDate: "۱۴۰۳/۱۰/۲۵",
+      priority: "بالا",
+      status: "در حال انجام",
+      assignedTo: ["محمد احمدی", "حسن کریمی"],
+      linkedKR: "کاهش زمان توقف خط از ۱۵ دقیقه/روز به ۵ دقیقه/روز",
       checklist: [
-        { item: "Order sensors", completed: true },
-        { item: "Schedule downtime", completed: true },
-        { item: "Install hardware", completed: false },
-        { item: "Configure software", completed: false },
-        { item: "Test system", completed: false }
+        { item: "سفارش سنسورها", completed: true },
+        { item: "برنامه‌ریزی زمان توقف", completed: true },
+        { item: "نصب سخت‌افزار", completed: false },
+        { item: "پیکربندی نرم‌افزار", completed: false },
+        { item: "تست سیستم", completed: false }
       ],
-      createdBy: "David Johnson"
+      createdBy: "علی محمدی"
     },
     {
       id: 2,
-      name: "Update safety procedures documentation",
-      description: "Revise and update all safety procedure documents",
-      dueDate: "2024-01-20",
-      priority: "Medium",
-      status: "To Do",
-      assignedTo: ["Maria Garcia"],
-      linkedKR: "Implement 5 new quality checkpoints",
+      name: "به‌روزرسانی مستندات رویه‌های ایمنی",
+      description: "بازنگری و به‌روزرسانی کلیه اسناد رویه‌های ایمنی",
+      dueDate: "۱۴۰۳/۱۰/۳۰",
+      priority: "متوسط",
+      status: "انجام نشده",
+      assignedTo: ["مریم رضایی"],
+      linkedKR: "اجرای ۵ نقطه کنترل کیفی جدید",
       checklist: [
-        { item: "Review current procedures", completed: false },
-        { item: "Identify gaps", completed: false },
-        { item: "Draft updates", completed: false },
-        { item: "Manager approval", completed: false }
+        { item: "بررسی رویه‌های فعلی", completed: false },
+        { item: "شناسایی کاستی‌ها", completed: false },
+        { item: "پیش‌نویس تغییرات", completed: false },
+        { item: "تأیید مدیریت", completed: false }
       ],
-      createdBy: "Lisa Chen"
+      createdBy: "لیلا حسینی"
     },
     {
       id: 3,
-      name: "Calibrate quality measurement equipment",
-      description: "Monthly calibration of all quality testing equipment",
-      dueDate: "2024-01-12",
-      priority: "High",
-      status: "Completed",
-      assignedTo: ["Maria Garcia"],
-      linkedKR: "Reduce defect rate to under 2%",
+      name: "کالیبراسیون تجهیزات اندازه‌گیری کیفیت",
+      description: "کالیبراسیون ماهانه کلیه تجهیزات تست کیفیت",
+      dueDate: "۱۴۰۳/۱۰/۲۲",
+      priority: "بالا",
+      status: "تکمیل",
+      assignedTo: ["مریم رضایی"],
+      linkedKR: "کاهش نرخ نقص به کمتر از ۲٪",
       checklist: [
-        { item: "Test precision scales", completed: true },
-        { item: "Calibrate thickness gauge", completed: true },
-        { item: "Update calibration log", completed: true },
-        { item: "Generate report", completed: true }
+        { item: "تست ترازوهای دقیق", completed: true },
+        { item: "کالیبراسیون ضخامت‌سنج", completed: true },
+        { item: "به‌روزرسانی لاگ کالیبراسیون", completed: true },
+        { item: "تولید گزارش", completed: true }
       ],
-      createdBy: "Lisa Chen"
+      createdBy: "لیلا حسینی"
     }
   ];
 
   const filteredTasks = tasks.filter(task => {
     if (activeFilter === "all") return true;
-    if (activeFilter === "todo") return task.status === "To Do";
-    if (activeFilter === "progress") return task.status === "In Progress";
-    if (activeFilter === "completed") return task.status === "Completed";
+    if (activeFilter === "todo") return task.status === "انجام نشده";
+    if (activeFilter === "progress") return task.status === "در حال انجام";
+    if (activeFilter === "completed") return task.status === "تکمیل";
     return true;
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "To Do": return "secondary";
-      case "In Progress": return "default";
-      case "Completed": return "outline";
+      case "انجام نشده": return "secondary";
+      case "در حال انجام": return "default";
+      case "تکمیل": return "outline";
       default: return "secondary";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "High": return "destructive";
-      case "Medium": return "default";
-      case "Low": return "secondary";
+      case "بالا": return "destructive";
+      case "متوسط": return "default";
+      case "پایین": return "secondary";
       default: return "secondary";
     }
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Task Management</h1>
-            <p className="text-muted-foreground">Manage special projects and strategic initiatives</p>
+            <h1 className="text-3xl font-bold">مدیریت وظایف</h1>
+            <p className="text-muted-foreground">مدیریت پروژه‌های ویژه و ابتکارات استراتژیک</p>
           </div>
           <Button className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
-            New Task
+            وظیفه جدید
           </Button>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex space-x-1 bg-muted p-1 rounded-lg">
+          <div className="flex space-x-1 bg-muted p-1 rounded-lg space-x-reverse">
             <Button
               variant={activeFilter === "all" ? "default" : "ghost"}
               onClick={() => setActiveFilter("all")}
               size="sm"
             >
-              All Tasks
+              همه وظایف
             </Button>
             <Button
               variant={activeFilter === "todo" ? "default" : "ghost"}
               onClick={() => setActiveFilter("todo")}
               size="sm"
             >
-              To Do
+              انجام نشده
             </Button>
             <Button
               variant={activeFilter === "progress" ? "default" : "ghost"}
               onClick={() => setActiveFilter("progress")}
               size="sm"
             >
-              In Progress
+              در حال انجام
             </Button>
             <Button
               variant={activeFilter === "completed" ? "default" : "ghost"}
               onClick={() => setActiveFilter("completed")}
               size="sm"
             >
-              Completed
+              تکمیل
             </Button>
           </div>
           <Button variant="outline" size="sm" className="flex items-center gap-2">
             <Filter className="h-4 w-4" />
-            Filter
+            فیلتر
           </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Tasks</CardTitle>
+              <CardTitle className="text-sm font-medium">کل وظایف</CardTitle>
               <CheckSquare className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{tasks.length}</div>
-              <p className="text-xs text-muted-foreground">Active projects</p>
+              <p className="text-xs text-muted-foreground">پروژه‌های فعال</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+              <CardTitle className="text-sm font-medium">در حال انجام</CardTitle>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {tasks.filter(t => t.status === "In Progress").length}
+                {tasks.filter(t => t.status === "در حال انجام").length}
               </div>
-              <p className="text-xs text-muted-foreground">Active work</p>
+              <p className="text-xs text-muted-foreground">کار فعال</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">High Priority</CardTitle>
+              <CardTitle className="text-sm font-medium">اولویت بالا</CardTitle>
               <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {tasks.filter(t => t.priority === "High").length}
+                {tasks.filter(t => t.priority === "بالا").length}
               </div>
-              <p className="text-xs text-muted-foreground">Urgent tasks</p>
+              <p className="text-xs text-muted-foreground">وظایف فوری</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+              <CardTitle className="text-sm font-medium">اعضای تیم</CardTitle>
               <User className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">5</div>
-              <p className="text-xs text-muted-foreground">Assigned users</p>
+              <div className="text-2xl font-bold">۵</div>
+              <p className="text-xs text-muted-foreground">کاربران تخصیص‌یافته</p>
             </CardContent>
           </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Task List</h2>
+            <h2 className="text-xl font-semibold">فهرست وظایف</h2>
             {filteredTasks.map((task) => (
               <Card key={task.id}>
                 <CardHeader>
@@ -219,17 +219,17 @@ const Tasks = () => {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-muted-foreground">Due Date:</span>
+                      <span className="text-muted-foreground">مهلت:</span>
                       <p className="font-medium">{task.dueDate}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Created by:</span>
+                      <span className="text-muted-foreground">ایجاد شده توسط:</span>
                       <p className="font-medium">{task.createdBy}</p>
                     </div>
                   </div>
                   
                   <div>
-                    <span className="text-muted-foreground text-sm">Assigned to:</span>
+                    <span className="text-muted-foreground text-sm">تخصیص به:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {task.assignedTo.map((person, index) => (
                         <Badge key={index} variant="outline" className="text-xs">
@@ -240,15 +240,15 @@ const Tasks = () => {
                   </div>
 
                   <div className="bg-muted/50 p-3 rounded-lg">
-                    <span className="text-sm font-medium text-muted-foreground">Linked to Goal:</span>
+                    <span className="text-sm font-medium text-muted-foreground">مرتبط با هدف:</span>
                     <p className="text-sm mt-1">{task.linkedKR}</p>
                   </div>
 
                   <div>
-                    <span className="text-sm font-medium text-muted-foreground">Progress Checklist:</span>
+                    <span className="text-sm font-medium text-muted-foreground">چک‌لیست پیشرفت:</span>
                     <div className="mt-2 space-y-2">
                       {task.checklist.map((item, index) => (
-                        <div key={index} className="flex items-center space-x-2">
+                        <div key={index} className="flex items-center space-x-2 space-x-reverse">
                           <Checkbox 
                             checked={item.completed} 
                             disabled 
@@ -263,7 +263,7 @@ const Tasks = () => {
                   </div>
 
                   <div className="flex justify-end">
-                    <Button variant="ghost" size="sm">View Details</Button>
+                    <Button variant="ghost" size="sm">مشاهده جزئیات</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -272,75 +272,75 @@ const Tasks = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Create New Task</CardTitle>
-              <CardDescription>Add a new project task linked to strategic objectives</CardDescription>
+              <CardTitle>ایجاد وظیفه جدید</CardTitle>
+              <CardDescription>افزودن وظیفه پروژه‌ای جدید مرتبط با اهداف استراتژیک</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="taskName">Task Name</Label>
-                <Input id="taskName" placeholder="e.g., Implement new quality process" />
+                <Label htmlFor="taskName">نام وظیفه</Label>
+                <Input id="taskName" placeholder="مثلاً اجرای فرآیند کیفی جدید" />
               </div>
               
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">توضیحات</Label>
                 <Textarea 
                   id="description" 
-                  placeholder="Detailed task description..."
+                  placeholder="توضیح تفصیلی وظیفه..."
                   rows={3}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="dueDate">Due Date</Label>
+                  <Label htmlFor="dueDate">مهلت</Label>
                   <Input id="dueDate" type="date" />
                 </div>
                 <div>
-                  <Label htmlFor="priority">Priority</Label>
+                  <Label htmlFor="priority">اولویت</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select priority" />
+                      <SelectValue placeholder="انتخاب اولویت" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="high">High</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="high">بالا</SelectItem>
+                      <SelectItem value="medium">متوسط</SelectItem>
+                      <SelectItem value="low">پایین</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="linkedKR">Linked Key Result *</Label>
+                <Label htmlFor="linkedKR">نتیجه کلیدی مرتبط *</Label>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select key result" />
+                    <SelectValue placeholder="انتخاب نتیجه کلیدی" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="downtime">Reduce line downtime from 15 mins/day to 5 mins/day</SelectItem>
-                    <SelectItem value="waste">Decrease raw material waste by 3%</SelectItem>
-                    <SelectItem value="output">Increase output by 15%</SelectItem>
-                    <SelectItem value="defects">Reduce defect rate to under 2%</SelectItem>
+                    <SelectItem value="downtime">کاهش زمان توقف خط از ۱۵ دقیقه/روز به ۵ دقیقه/روز</SelectItem>
+                    <SelectItem value="waste">کاهش ضایعات مواد خام به میزان ۳٪</SelectItem>
+                    <SelectItem value="output">افزایش تولید به میزان ۱۵٪</SelectItem>
+                    <SelectItem value="defects">کاهش نرخ نقص به کمتر از ۲٪</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <Label htmlFor="assignTo">Assign To</Label>
+                <Label htmlFor="assignTo">تخصیص به</Label>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select team member" />
+                    <SelectValue placeholder="انتخاب عضو تیم" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="john">John Smith</SelectItem>
-                    <SelectItem value="maria">Maria Garcia</SelectItem>
-                    <SelectItem value="mike">Mike Wilson</SelectItem>
-                    <SelectItem value="sarah">Sarah Johnson</SelectItem>
+                    <SelectItem value="mohammad">محمد احمدی</SelectItem>
+                    <SelectItem value="maryam">مریم رضایی</SelectItem>
+                    <SelectItem value="hassan">حسن کریمی</SelectItem>
+                    <SelectItem value="sara">سارا محمدی</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <Button className="w-full">Create Task</Button>
+              <Button className="w-full">ایجاد وظیفه</Button>
             </CardContent>
           </Card>
         </div>

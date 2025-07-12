@@ -18,11 +18,11 @@ const Navigation = () => {
   const location = useLocation();
 
   const navigationItems = [
-    { path: "/", label: "Dashboard", icon: Home },
-    { path: "/organization", label: "Organization", icon: Building },
-    { path: "/strategic", label: "Strategic Planning", icon: Target },
-    { path: "/tasks", label: "Task Management", icon: CheckSquare },
-    { path: "/manager", label: "Manager View", icon: BarChart3 }
+    { path: "/", label: "داشبورد", icon: Home },
+    { path: "/organization", label: "سازمان", icon: Building },
+    { path: "/strategic", label: "برنامه‌ریزی استراتژیک", icon: Target },
+    { path: "/tasks", label: "مدیریت وظایف", icon: CheckSquare },
+    { path: "/manager", label: "نمای مدیر", icon: BarChart3 }
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -30,7 +30,7 @@ const Navigation = () => {
   return (
     <>
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+      <div className="lg:hidden fixed top-4 right-4 z-50">
         <Button
           variant="outline"
           size="sm"
@@ -51,18 +51,18 @@ const Navigation = () => {
 
       {/* Navigation sidebar */}
       <nav className={`
-        fixed top-0 left-0 h-full w-64 bg-card border-r border-border z-40 transform transition-transform duration-200 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        fixed top-0 right-0 h-full w-64 bg-card border-l border-border z-40 transform transition-transform duration-200 ease-in-out
+        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         lg:translate-x-0 lg:static lg:z-auto
-      `}>
+      `} dir="rtl">
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <Building className="h-4 w-4 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-bold">WorkAlign</h1>
-              <p className="text-xs text-muted-foreground">Performance System</p>
+              <h1 className="text-lg font-bold">ورک‌الاین</h1>
+              <p className="text-xs text-muted-foreground">سیستم مدیریت عملکرد</p>
             </div>
           </div>
 
@@ -92,15 +92,15 @@ const Navigation = () => {
           <div className="mt-8 p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center">
-                <span className="text-xs font-medium">JS</span>
+                <span className="text-xs font-medium">م.ا</span>
               </div>
               <div>
-                <p className="text-sm font-medium">John Smith</p>
-                <p className="text-xs text-muted-foreground">Production Supervisor</p>
+                <p className="text-sm font-medium">محمد احمدی</p>
+                <p className="text-xs text-muted-foreground">سرپرست خط تولید</p>
               </div>
             </div>
             <Badge variant="outline" className="text-xs">
-              Online
+              آنلاین
             </Badge>
           </div>
         </div>
