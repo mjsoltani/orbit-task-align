@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,11 +7,27 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Users, Plus, Building, UserCheck, Settings } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Organization = () => {
   const [activeTab, setActiveTab] = useState("positions");
+  const { toast } = useToast();
+  
+  // Form states
+  const [newPositionForm, setNewPositionForm] = useState({
+    name: "",
+    department: "",
+    reportsTo: ""
+  });
+  
+  const [newTaskForm, setNewTaskForm] = useState({
+    name: "",
+    position: "",
+    period: "",
+    description: ""
+  });
 
-  const positions = [
+  const [positions, setPositions] = useState([
     {
       id: 1,
       name: "سرپرست خط تولید",
@@ -45,9 +60,9 @@ const Organization = () => {
       routineTasks: 5,
       parentPosition: "سرپرست تعمیرات"
     }
-  ];
+  ]);
 
-  const routineTasks = [
+  const [routineTasks, setRoutineTasks] = useState([
     {
       id: 1,
       name: "بررسی ایمنی روزانه تجهیزات",
@@ -72,7 +87,97 @@ const Organization = () => {
       checklist: ["جمع‌آوری معیارها", "تحلیل روندها", "ارسال گزارش"],
       description: "تحلیل عملکرد تولید هفتگی و گزارش‌دهی"
     }
-  ];
+  ]);
+
+  // Handler functions
+  const handleCreatePosition = () => {
+    if (!newPositionForm.name || !newPositionForm.department) {
+      toast({
+        title: "خطا",
+        description: "لطفا تمام فیلدهای الزامی را پر کنید",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newPosition = {
+      id: positions.length + 1,
+      name: newPositionForm.name,
+      department: newPositionForm.department,
+      assignedEmployee: "تخصیص نیافته",
+      routineTasks: 0,
+      parentPosition: newPositionForm.reportsTo || "بدون گزارش‌دهی"
+    };
+
+    setPositions([...positions, newPosition]);
+    setNewPositionForm({ name: "", department: "", reportsTo: "" });
+    
+    toast({
+      title: "موفقیت",
+      description: "پست جدید با موفقیت ایجاد شد",
+    });
+  };
+
+  const handleCreateTask = () => {
+    if (!newTaskForm.name || !newTaskForm.position || !newTaskForm.period) {
+      toast({
+        title: "خطا",
+        description: "لطفا تمام فیلدهای الزامی را پر کنید",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newTask = {
+      id: routineTasks.length + 1,
+      name: newTaskForm.name,
+      position: newTaskForm.position,
+      period: newTaskForm.period,
+      description: newTaskForm.description,
+      checklist: ["مرحله اول", "مرحله دوم"]
+    };
+
+    setRoutineTasks([...routineTasks, newTask]);
+    setNewTaskForm({ name: "", position: "", period: "", description: "" });
+    
+    toast({
+      title: "موفقیت",
+      description: "وظیفه روتین جدید با موفقیت ایجاد شد",
+    });
+  };
+
+  const handleEditPosition = (positionId: number) => {
+    toast({
+      title: "ویرایش پست",
+      description: `در حال ویرایش پست شماره ${positionId}`,
+    });
+  };
+
+  const handleEditTask = (taskId: number) => {
+    toast({
+      title: "ویرایش وظیفه",
+      description: `در حال ویرایش وظیفه شماره ${taskId}`,
+    });
+  };
+
+  const handleAddNew = () => {
+    if (activeTab === "positions") {
+      toast({
+        title: "افزودن پست جدید",
+        description: "فرم افزودن پست جدید را پر کنید",
+      });
+    } else if (activeTab === "tasks") {
+      toast({
+        title: "افزودن وظیفه جدید",
+        description: "فرم افزودن وظیفه جدید را پر کنید",
+      });
+    } else {
+      toast({
+        title: "افزودن جدید",
+        description: "برای افزودن موارد جدید از تب‌های مربوطه استفاده کنید",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background p-6" dir="rtl">
@@ -82,7 +187,7 @@ const Organization = () => {
             <h1 className="text-3xl font-bold">منابع انسانی و سازمان</h1>
             <p className="text-muted-foreground">مدیریت ساختار سازمانی و وظایف روتین</p>
           </div>
-          <Button className="flex items-center gap-2">
+          <Button onClick={handleAddNew} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
             افزودن جدید
           </Button>
@@ -143,7 +248,13 @@ const Organization = () => {
                       <span className="text-sm text-muted-foreground">
                         {position.routineTasks} وظیفه روتین تخصیص یافته
                       </span>
-                      <Button variant="ghost" size="sm">ویرایش</Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => handleEditPosition(position.id)}
+                      >
+                        ویرایش
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -158,36 +269,41 @@ const Organization = () => {
               <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="positionName">نام پست</Label>
-                  <Input id="positionName" placeholder="مثلاً تحلیلگر ارشد کیفیت" />
+                  <Input 
+                    id="positionName" 
+                    placeholder="مثلاً تحلیلگر ارشد کیفیت"
+                    value={newPositionForm.name}
+                    onChange={(e) => setNewPositionForm({...newPositionForm, name: e.target.value})}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="department">بخش</Label>
-                  <Select>
+                  <Select value={newPositionForm.department} onValueChange={(value) => setNewPositionForm({...newPositionForm, department: value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="انتخاب بخش" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="production">تولید</SelectItem>
-                      <SelectItem value="quality">کیفیت</SelectItem>
-                      <SelectItem value="maintenance">تعمیرات</SelectItem>
-                      <SelectItem value="admin">اداری</SelectItem>
+                      <SelectItem value="تولید">تولید</SelectItem>
+                      <SelectItem value="کیفیت">کیفیت</SelectItem>
+                      <SelectItem value="تعمیرات">تعمیرات</SelectItem>
+                      <SelectItem value="اداری">اداری</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="reportsTo">گزارش به</Label>
-                  <Select>
+                  <Select value={newPositionForm.reportsTo} onValueChange={(value) => setNewPositionForm({...newPositionForm, reportsTo: value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="انتخاب پست والد" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="production-manager">مدیر تولید</SelectItem>
-                      <SelectItem value="quality-manager">مدیر کیفیت</SelectItem>
-                      <SelectItem value="plant-director">مدیر کارخانه</SelectItem>
+                      <SelectItem value="مدیر تولید">مدیر تولید</SelectItem>
+                      <SelectItem value="مدیر کیفیت">مدیر کیفیت</SelectItem>
+                      <SelectItem value="مدیر کارخانه">مدیر کارخانه</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-full">ایجاد پست</Button>
+                <Button onClick={handleCreatePosition} className="w-full">ایجاد پست</Button>
               </CardContent>
             </Card>
           </div>
@@ -220,7 +336,13 @@ const Organization = () => {
                         ))}
                       </ul>
                     </div>
-                    <Button variant="ghost" size="sm">ویرایش وظیفه</Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleEditTask(task.id)}
+                    >
+                      ویرایش وظیفه
+                    </Button>
                   </div>
                 ))}
               </CardContent>
@@ -234,40 +356,52 @@ const Organization = () => {
               <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="taskName">نام وظیفه</Label>
-                  <Input id="taskName" placeholder="مثلاً بررسی کالیبراسیون روزانه" />
+                  <Input 
+                    id="taskName" 
+                    placeholder="مثلاً بررسی کالیبراسیون روزانه"
+                    value={newTaskForm.name}
+                    onChange={(e) => setNewTaskForm({...newTaskForm, name: e.target.value})}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="position">تخصیص به پست</Label>
-                  <Select>
+                  <Select value={newTaskForm.position} onValueChange={(value) => setNewTaskForm({...newTaskForm, position: value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="انتخاب پست" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="supervisor">سرپرست خط تولید</SelectItem>
-                      <SelectItem value="inspector">بازرس کنترل کیفیت</SelectItem>
-                      <SelectItem value="technician">تکنسین تعمیرات</SelectItem>
+                      {positions.map((position) => (
+                        <SelectItem key={position.id} value={position.name}>
+                          {position.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="period">دوره تکرار</Label>
-                  <Select>
+                  <Select value={newTaskForm.period} onValueChange={(value) => setNewTaskForm({...newTaskForm, period: value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="انتخاب دوره" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="daily">روزانه</SelectItem>
-                      <SelectItem value="weekly">هفتگی</SelectItem>
-                      <SelectItem value="monthly">ماهانه</SelectItem>
-                      <SelectItem value="quarterly">فصلی</SelectItem>
+                      <SelectItem value="روزانه">روزانه</SelectItem>
+                      <SelectItem value="هفتگی">هفتگی</SelectItem>
+                      <SelectItem value="ماهانه">ماهانه</SelectItem>
+                      <SelectItem value="فصلی">فصلی</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="description">توضیحات</Label>
-                  <Textarea id="description" placeholder="دستورالعمل دقیق وظیفه..." />
+                  <Textarea 
+                    id="description" 
+                    placeholder="دستورالعمل دقیق وظیفه..."
+                    value={newTaskForm.description}
+                    onChange={(e) => setNewTaskForm({...newTaskForm, description: e.target.value})}
+                  />
                 </div>
-                <Button className="w-full">ایجاد وظیفه</Button>
+                <Button onClick={handleCreateTask} className="w-full">ایجاد وظیفه</Button>
               </CardContent>
             </Card>
           </div>
