@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Users, Plus, Building, UserCheck, Settings } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { OrganizationalChart } from "@/components/OrganizationalChart";
 
 const Organization = () => {
   const [activeTab, setActiveTab] = useState("positions");
@@ -308,60 +309,14 @@ const Organization = () => {
         {activeTab === "chart" && (
           <Card>
             <CardHeader>
-              <CardTitle>چارت سازمانی</CardTitle>
-              <CardDescription>نمای بصری روابط گزارش‌دهی</CardDescription>
+              <CardTitle>چارت سازمانی داینامیک</CardTitle>
+              <CardDescription>مدیریت تعاملی ساختار سازمانی با قابلیت اضافه کردن و وصل کردن پست‌ها</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col items-center space-y-6 p-6">
-                <div className="bg-primary/10 p-4 rounded-lg border-2 border-primary/20">
-                  <div className="text-center">
-                    <h3 className="font-semibold">مدیر کارخانه</h3>
-                    <p className="text-sm text-muted-foreground">سارا محمدی</p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-secondary/50 p-4 rounded-lg border">
-                    <div className="text-center">
-                      <h4 className="font-semibold">مدیر تولید</h4>
-                      <p className="text-sm text-muted-foreground">علی محمدی</p>
-                      <Badge variant="outline" className="mt-2">تولید</Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-secondary/50 p-4 rounded-lg border">
-                    <div className="text-center">
-                      <h4 className="font-semibold">مدیر کیفیت</h4>
-                      <p className="text-sm text-muted-foreground">لیلا حسینی</p>
-                      <Badge variant="outline" className="mt-2">کیفیت</Badge>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-secondary/50 p-4 rounded-lg border">
-                    <div className="text-center">
-                      <h4 className="font-semibold">سرپرست تعمیرات</h4>
-                      <p className="text-sm text-muted-foreground">رضا کریمی</p>
-                      <Badge variant="outline" className="mt-2">تعمیرات</Badge>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-muted/50 p-3 rounded-lg border">
-                    <div className="text-center">
-                      <h5 className="font-medium">سرپرست خط تولید</h5>
-                      <p className="text-sm text-muted-foreground">محمد احمدی</p>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-muted/50 p-3 rounded-lg border">
-                    <div className="text-center">
-                      <h5 className="font-medium">بازرس کنترل کیفیت</h5>
-                      <p className="text-sm text-muted-foreground">مریم رضایی</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <OrganizationalChart 
+                positions={positions} 
+                onPositionsUpdate={setPositions}
+              />
             </CardContent>
           </Card>
         )}
