@@ -34,67 +34,10 @@ const Organization = () => {
     description: ""
   });
 
-  const [positions, setPositions] = useState([
-    {
-      id: 1,
-      name: "سرپرست خط تولید",
-      department: "تولید",
-      assignedEmployee: "محمد احمدی",
-      routineTasks: 4,
-      parentPosition: "مدیر تولید"
-    },
-    {
-      id: 2,
-      name: "بازرس کنترل کیفیت",
-      department: "کیفیت",
-      assignedEmployee: "مریم رضایی",
-      routineTasks: 3,
-      parentPosition: "مدیر کیفیت"
-    },
-    {
-      id: 3,
-      name: "مدیر تولید",
-      department: "تولید",
-      assignedEmployee: "علی محمدی",
-      routineTasks: 2,
-      parentPosition: "مدیر کارخانه"
-    },
-    {
-      id: 4,
-      name: "تکنسین تعمیرات",
-      department: "تعمیرات",
-      assignedEmployee: "حسن کریمی",
-      routineTasks: 5,
-      parentPosition: "سرپرست تعمیرات"
-    }
-  ]);
+  // Start with empty arrays - only user-added items will show
+  const [positions, setPositions] = useState([]);
 
-  const [routineTasks, setRoutineTasks] = useState([
-    {
-      id: 1,
-      name: "بررسی ایمنی روزانه تجهیزات",
-      position: "سرپرست خط تولید",
-      period: "روزانه",
-      checklist: ["بررسی کلیدهای اضطراری", "تأیید محافظ‌های ایمنی", "تست چراغ‌های هشدار"],
-      description: "بازرسی جامع ایمنی تجهیزات تولید"
-    },
-    {
-      id: 2,
-      name: "بازرسی کنترل کیفیت",
-      position: "بازرس کنترل کیفیت",
-      period: "روزانه",
-      checklist: ["نمونه‌گیری کیفیت محصول", "بررسی ابعاد", "ثبت نتایج"],
-      description: "روش‌های نمونه‌گیری تصادفی و آزمایش کیفیت"
-    },
-    {
-      id: 3,
-      name: "گزارش تولید هفتگی",
-      position: "مدیر تولید",
-      period: "هفتگی",
-      checklist: ["جمع‌آوری معیارها", "تحلیل روندها", "ارسال گزارش"],
-      description: "تحلیل عملکرد تولید هفتگی و گزارش‌دهی"
-    }
-  ]);
+  const [routineTasks, setRoutineTasks] = useState([]);
 
   // Handler functions
   const handleCreatePosition = () => {
@@ -233,66 +176,75 @@ const Organization = () => {
               <CardDescription>مدیریت پست‌های سازمانی و تخصیص کارکنان</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-right">نام پست</TableHead>
-                    <TableHead className="text-right">بخش</TableHead>
-                    <TableHead className="text-right">مسئول</TableHead>
-                    <TableHead className="text-right">گزارش به</TableHead>
-                    <TableHead className="text-right">وظایف</TableHead>
-                    <TableHead className="text-right">عملیات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {positions.map((position) => (
-                    <TableRow key={position.id}>
-                      <TableCell className="font-medium">{position.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{position.department}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <UserCheck className="h-4 w-4 text-muted-foreground" />
-                          {position.assignedEmployee}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {position.parentPosition}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">
-                          {position.routineTasks} وظیفه
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleEditPosition(position.id)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => {
-                              toast({
-                                title: "حذف پست",
-                                description: `پست ${position.name} حذف شد`,
-                                variant: "destructive"
-                              });
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+              {positions.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Building className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>هنوز هیچ پست سازمانی تعریف نشده است</p>
+                  <p className="text-sm">برای شروع، پست جدید اضافه کنید</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-right">نام پست</TableHead>
+                      <TableHead className="text-right">بخش</TableHead>
+                      <TableHead className="text-right">مسئول</TableHead>
+                      <TableHead className="text-right">گزارش به</TableHead>
+                      <TableHead className="text-right">وظایف</TableHead>
+                      <TableHead className="text-right">عملیات</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {positions.map((position) => (
+                      <TableRow key={position.id}>
+                        <TableCell className="font-medium">{position.name}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{position.department}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <UserCheck className="h-4 w-4 text-muted-foreground" />
+                            {position.assignedEmployee}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {position.parentPosition}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="secondary">
+                            {position.routineTasks} وظیفه
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleEditPosition(position.id)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => {
+                                setPositions(positions.filter(p => p.id !== position.id));
+                                toast({
+                                  title: "حذف پست",
+                                  description: `پست ${position.name} حذف شد`,
+                                  variant: "destructive"
+                                });
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         )}
@@ -307,57 +259,66 @@ const Organization = () => {
               <CardDescription>مدیریت وظایف خودکار بر اساس پست‌های شغلی</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-right">نام وظیفه</TableHead>
-                    <TableHead className="text-right">پست مسئول</TableHead>
-                    <TableHead className="text-right">دوره تکرار</TableHead>
-                    <TableHead className="text-right">توضیحات</TableHead>
-                    <TableHead className="text-right">عملیات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {routineTasks.map((task) => (
-                    <TableRow key={task.id}>
-                      <TableCell className="font-medium">{task.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{task.position}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{task.period}</Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
-                        {task.description}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleEditTask(task.id)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => {
-                              toast({
-                                title: "حذف وظیفه",
-                                description: `وظیفه ${task.name} حذف شد`,
-                                variant: "destructive"
-                              });
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+              {routineTasks.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Settings className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>هنوز هیچ وظیفه روتین تعریف نشده است</p>
+                  <p className="text-sm">برای شروع، وظیفه جدید اضافه کنید</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-right">نام وظیفه</TableHead>
+                      <TableHead className="text-right">پست مسئول</TableHead>
+                      <TableHead className="text-right">دوره تکرار</TableHead>
+                      <TableHead className="text-right">توضیحات</TableHead>
+                      <TableHead className="text-right">عملیات</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {routineTasks.map((task) => (
+                      <TableRow key={task.id}>
+                        <TableCell className="font-medium">{task.name}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{task.position}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="secondary">{task.period}</Badge>
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
+                          {task.description}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleEditTask(task.id)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => {
+                                setRoutineTasks(routineTasks.filter(t => t.id !== task.id));
+                                toast({
+                                  title: "حذف وظیفه",
+                                  description: `وظیفه ${task.name} حذف شد`,
+                                  variant: "destructive"
+                                });
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         )}
