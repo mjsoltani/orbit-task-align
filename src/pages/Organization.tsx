@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Users, Plus, Building, UserCheck, Settings } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -12,6 +13,10 @@ import { useToast } from "@/hooks/use-toast";
 const Organization = () => {
   const [activeTab, setActiveTab] = useState("positions");
   const { toast } = useToast();
+  
+  // Dialog states
+  const [isPositionDialogOpen, setIsPositionDialogOpen] = useState(false);
+  const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
   
   // Form states
   const [newPositionForm, setNewPositionForm] = useState({
@@ -111,6 +116,7 @@ const Organization = () => {
 
     setPositions([...positions, newPosition]);
     setNewPositionForm({ name: "", department: "", reportsTo: "" });
+    setIsPositionDialogOpen(false);
     
     toast({
       title: "موفقیت",
@@ -139,6 +145,7 @@ const Organization = () => {
 
     setRoutineTasks([...routineTasks, newTask]);
     setNewTaskForm({ name: "", position: "", period: "", description: "" });
+    setIsTaskDialogOpen(false);
     
     toast({
       title: "موفقیت",
@@ -162,15 +169,9 @@ const Organization = () => {
 
   const handleAddNew = () => {
     if (activeTab === "positions") {
-      toast({
-        title: "افزودن پست جدید",
-        description: "فرم افزودن پست جدید را پر کنید",
-      });
+      setIsPositionDialogOpen(true);
     } else if (activeTab === "tasks") {
-      toast({
-        title: "افزودن وظیفه جدید",
-        description: "فرم افزودن وظیفه جدید را پر کنید",
-      });
+      setIsTaskDialogOpen(true);
     } else {
       toast({
         title: "افزودن جدید",
@@ -221,7 +222,7 @@ const Organization = () => {
         </div>
 
         {activeTab === "positions" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle>پست‌های شغلی</CardTitle>
@@ -260,57 +261,11 @@ const Organization = () => {
                 ))}
               </CardContent>
             </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>ایجاد پست جدید</CardTitle>
-                <CardDescription>افزودن پست شغلی جدید به سازمان</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="positionName">نام پست</Label>
-                  <Input 
-                    id="positionName" 
-                    placeholder="مثلاً تحلیلگر ارشد کیفیت"
-                    value={newPositionForm.name}
-                    onChange={(e) => setNewPositionForm({...newPositionForm, name: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="department">بخش</Label>
-                  <Select value={newPositionForm.department} onValueChange={(value) => setNewPositionForm({...newPositionForm, department: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="انتخاب بخش" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="تولید">تولید</SelectItem>
-                      <SelectItem value="کیفیت">کیفیت</SelectItem>
-                      <SelectItem value="تعمیرات">تعمیرات</SelectItem>
-                      <SelectItem value="اداری">اداری</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="reportsTo">گزارش به</Label>
-                  <Select value={newPositionForm.reportsTo} onValueChange={(value) => setNewPositionForm({...newPositionForm, reportsTo: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="انتخاب پست والد" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="مدیر تولید">مدیر تولید</SelectItem>
-                      <SelectItem value="مدیر کیفیت">مدیر کیفیت</SelectItem>
-                      <SelectItem value="مدیر کارخانه">مدیر کارخانه</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={handleCreatePosition} className="w-full">ایجاد پست</Button>
-              </CardContent>
-            </Card>
           </div>
         )}
 
         {activeTab === "tasks" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle>وظایف روتین</CardTitle>
@@ -345,63 +300,6 @@ const Organization = () => {
                     </Button>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>ایجاد وظیفه روتین</CardTitle>
-                <CardDescription>تعریف وظیفه روتین جدید برای یک پست شغلی</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="taskName">نام وظیفه</Label>
-                  <Input 
-                    id="taskName" 
-                    placeholder="مثلاً بررسی کالیبراسیون روزانه"
-                    value={newTaskForm.name}
-                    onChange={(e) => setNewTaskForm({...newTaskForm, name: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="position">تخصیص به پست</Label>
-                  <Select value={newTaskForm.position} onValueChange={(value) => setNewTaskForm({...newTaskForm, position: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="انتخاب پست" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {positions.map((position) => (
-                        <SelectItem key={position.id} value={position.name}>
-                          {position.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="period">دوره تکرار</Label>
-                  <Select value={newTaskForm.period} onValueChange={(value) => setNewTaskForm({...newTaskForm, period: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="انتخاب دوره" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="روزانه">روزانه</SelectItem>
-                      <SelectItem value="هفتگی">هفتگی</SelectItem>
-                      <SelectItem value="ماهانه">ماهانه</SelectItem>
-                      <SelectItem value="فصلی">فصلی</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="description">توضیحات</Label>
-                  <Textarea 
-                    id="description" 
-                    placeholder="دستورالعمل دقیق وظیفه..."
-                    value={newTaskForm.description}
-                    onChange={(e) => setNewTaskForm({...newTaskForm, description: e.target.value})}
-                  />
-                </div>
-                <Button onClick={handleCreateTask} className="w-full">ایجاد وظیفه</Button>
               </CardContent>
             </Card>
           </div>
@@ -467,6 +365,119 @@ const Organization = () => {
             </CardContent>
           </Card>
         )}
+
+        {/* Position Creation Dialog */}
+        <Dialog open={isPositionDialogOpen} onOpenChange={setIsPositionDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]" dir="rtl">
+            <DialogHeader>
+              <DialogTitle>ایجاد پست جدید</DialogTitle>
+              <DialogDescription>
+                افزودن پست شغلی جدید به سازمان
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div>
+                <Label htmlFor="positionName">نام پست</Label>
+                <Input 
+                  id="positionName" 
+                  placeholder="مثلاً تحلیلگر ارشد کیفیت"
+                  value={newPositionForm.name}
+                  onChange={(e) => setNewPositionForm({...newPositionForm, name: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="department">بخش</Label>
+                <Select value={newPositionForm.department} onValueChange={(value) => setNewPositionForm({...newPositionForm, department: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="انتخاب بخش" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="تولید">تولید</SelectItem>
+                    <SelectItem value="کیفیت">کیفیت</SelectItem>
+                    <SelectItem value="تعمیرات">تعمیرات</SelectItem>
+                    <SelectItem value="اداری">اداری</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="reportsTo">گزارش به</Label>
+                <Select value={newPositionForm.reportsTo} onValueChange={(value) => setNewPositionForm({...newPositionForm, reportsTo: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="انتخاب پست والد" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="مدیر تولید">مدیر تولید</SelectItem>
+                    <SelectItem value="مدیر کیفیت">مدیر کیفیت</SelectItem>
+                    <SelectItem value="مدیر کارخانه">مدیر کارخانه</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleCreatePosition} className="w-full">ایجاد پست</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Task Creation Dialog */}
+        <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]" dir="rtl">
+            <DialogHeader>
+              <DialogTitle>ایجاد وظیفه روتین</DialogTitle>
+              <DialogDescription>
+                تعریف وظیفه روتین جدید برای یک پست شغلی
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div>
+                <Label htmlFor="taskName">نام وظیفه</Label>
+                <Input 
+                  id="taskName" 
+                  placeholder="مثلاً بررسی کالیبراسیون روزانه"
+                  value={newTaskForm.name}
+                  onChange={(e) => setNewTaskForm({...newTaskForm, name: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="position">تخصیص به پست</Label>
+                <Select value={newTaskForm.position} onValueChange={(value) => setNewTaskForm({...newTaskForm, position: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="انتخاب پست" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {positions.map((position) => (
+                      <SelectItem key={position.id} value={position.name}>
+                        {position.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="period">دوره تکرار</Label>
+                <Select value={newTaskForm.period} onValueChange={(value) => setNewTaskForm({...newTaskForm, period: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="انتخاب دوره" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="روزانه">روزانه</SelectItem>
+                    <SelectItem value="هفتگی">هفتگی</SelectItem>
+                    <SelectItem value="ماهانه">ماهانه</SelectItem>
+                    <SelectItem value="فصلی">فصلی</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="description">توضیحات</Label>
+                <Textarea 
+                  id="description" 
+                  placeholder="دستورالعمل دقیق وظیفه..."
+                  value={newTaskForm.description}
+                  onChange={(e) => setNewTaskForm({...newTaskForm, description: e.target.value})}
+                />
+              </div>
+              <Button onClick={handleCreateTask} className="w-full">ایجاد وظیفه</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
