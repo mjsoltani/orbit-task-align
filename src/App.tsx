@@ -10,6 +10,7 @@ import Organization from "./pages/Organization";
 import Strategic from "./pages/Strategic";
 import Tasks from "./pages/Tasks";
 import Manager from "./pages/Manager";
+import Correspondence from "./pages/Correspondence";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/organization" element={<Organization />} />
               <Route path="/strategic" element={<Strategic />} />
               <Route path="/tasks" element={<Tasks />} />
+              <Route path="/correspondence" element={<Correspondence />} />
               <Route path="/manager" element={<Manager />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

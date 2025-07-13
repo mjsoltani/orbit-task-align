@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Target, TrendingUp, Plus, Calendar, Award } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Target, TrendingUp, Plus, Calendar, Award, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
 const Strategic = () => {
   const [activeView, setActiveView] = useState("objectives");
+  const [expandedObjectives, setExpandedObjectives] = useState<{ [key: number]: boolean }>({});
 
   const objectives = [
     {
@@ -93,6 +94,13 @@ const Strategic = () => {
     }
   };
 
+  const toggleObjective = (id: number) => {
+    setExpandedObjectives(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-background p-6" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -163,64 +171,80 @@ const Strategic = () => {
               </Card>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {objectives.map((objective) => (
                 <Card key={objective.id}>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-2">
-                        <CardTitle className="flex items-center gap-3">
-                          {objective.title}
-                          <Badge variant={getStatusColor(objective.status) as any}>
-                            {objective.status}
-                          </Badge>
-                        </CardTitle>
-                        <CardDescription>{objective.description}</CardDescription>
-                      </div>
-                      <div className="text-left space-y-1">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="h-4 w-4" />
-                          {objective.period}
-                        </div>
-                        <p className="text-sm text-muted-foreground">مسئول: {objective.owner}</p>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span>پیشرفت کلی</span>
-                        <span className="font-medium">{objective.progress}٪</span>
-                      </div>
-                      <Progress value={objective.progress} className="h-2" />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-sm">نتایج کلیدی:</h4>
-                      <div className="grid gap-4">
-                        {objective.keyResults.map((kr) => (
-                          <div key={kr.id} className="p-4 rounded-lg border bg-muted/30 space-y-3">
-                            <div className="flex items-center justify-between">
-                              <h5 className="font-medium text-sm">{kr.title}</h5>
-                              <Badge variant={getStatusColor(kr.status) as any} className="text-xs">
-                                {kr.status}
+                  <Collapsible 
+                    open={expandedObjectives[objective.id]} 
+                    onOpenChange={() => toggleObjective(objective.id)}
+                  >
+                    <CollapsibleTrigger asChild>
+                      <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-2">
+                            <CardTitle className="flex items-center gap-3">
+                              {objective.title}
+                              <Badge variant={getStatusColor(objective.status) as any}>
+                                {objective.status}
                               </Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-sm">
-                              <span>فعلی: {kr.currentValue} {kr.unit}</span>
-                              <span>هدف: {kr.targetValue} {kr.unit}</span>
-                            </div>
-                            <div className="space-y-1">
-                              <div className="flex items-center justify-between text-xs">
-                                <span>پیشرفت</span>
-                                <span>{kr.progress}٪</span>
-                              </div>
-                              <Progress value={kr.progress} className="h-1" />
-                            </div>
+                            </CardTitle>
+                            <CardDescription>{objective.description}</CardDescription>
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
+                          <div className="flex items-center gap-4">
+                            <div className="text-left space-y-1">
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Calendar className="h-4 w-4" />
+                                {objective.period}
+                              </div>
+                              <p className="text-sm text-muted-foreground">مسئول: {objective.owner}</p>
+                            </div>
+                            {expandedObjectives[objective.id] ? 
+                              <ChevronUp className="h-5 w-5" /> : 
+                              <ChevronDown className="h-5 w-5" />
+                            }
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span>پیشرفت کلی</span>
+                            <span className="font-medium">{objective.progress}٪</span>
+                          </div>
+                          <Progress value={objective.progress} className="h-2" />
+                        </div>
+                      </CardHeader>
+                    </CollapsibleTrigger>
+                    
+                    <CollapsibleContent>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <h4 className="font-semibold text-sm">نتایج کلیدی:</h4>
+                          <div className="grid gap-4">
+                            {objective.keyResults.map((kr) => (
+                              <div key={kr.id} className="p-4 rounded-lg border bg-muted/30 space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <h5 className="font-medium text-sm">{kr.title}</h5>
+                                  <Badge variant={getStatusColor(kr.status) as any} className="text-xs">
+                                    {kr.status}
+                                  </Badge>
+                                </div>
+                                <div className="flex items-center justify-between text-sm">
+                                  <span>فعلی: {kr.currentValue} {kr.unit}</span>
+                                  <span>هدف: {kr.targetValue} {kr.unit}</span>
+                                </div>
+                                <div className="space-y-1">
+                                  <div className="flex items-center justify-between text-xs">
+                                    <span>پیشرفت</span>
+                                    <span>{kr.progress}٪</span>
+                                  </div>
+                                  <Progress value={kr.progress} className="h-1" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </CollapsibleContent>
+                  </Collapsible>
                 </Card>
               ))}
             </div>
