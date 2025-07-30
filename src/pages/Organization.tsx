@@ -459,6 +459,7 @@ const Organization = () => {
             <CardContent>
               <OrganizationalChart 
                 positions={positions} 
+                personnel={personnel}
                 onPositionsUpdate={setPositions}
               />
             </CardContent>

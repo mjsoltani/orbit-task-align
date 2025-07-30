@@ -13,6 +13,7 @@ import {
   Node,
   Handle,
   Position,
+  ConnectionLineType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { Button } from "@/components/ui/button";
@@ -51,45 +52,91 @@ const nodeTypes = {
 
 interface OrganizationalChartProps {
   positions: any[];
+  personnel: any[];
   onPositionsUpdate?: (positions: any[]) => void;
 }
 
 export const OrganizationalChart: React.FC<OrganizationalChartProps> = ({ 
-  positions 
+  positions,
+  personnel,
+  onPositionsUpdate 
 }) => {
-  // Convert positions to nodes
-  const nodes: Node[] = positions.map((position, index) => ({
-    id: position.id.toString(),
-    type: 'position',
-    position: { 
-      x: (index % 3) * 250 + 50, 
-      y: Math.floor(index / 3) * 150 + 50 
-    },
-    data: {
-      name: position.name,
-      employee: 'مراجعه به تب پرسنل',
-      department: position.department,
-      isManager: position.name.includes('مدیر')
-    },
-  }));
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  
+  // Helper function to get personnel for a position
+  const getPersonnelForPosition = (positionId: number) => {
+    return personnel.filter(p => p.positionId === positionId);
+  };
 
-  // Create edges based on parent-child relationships
-  const edges: Edge[] = positions
-    .filter(pos => pos.parentPosition)
-    .map(pos => {
-      const parentPos = positions.find(p => p.name === pos.parentPosition);
-      if (parentPos) {
-        return {
-          id: `e${parentPos.id}-${pos.id}`,
-          source: parentPos.id.toString(),
-          target: pos.id.toString(),
-          type: 'smoothstep',
-          animated: false,
-        };
+  // Update nodes when positions or personnel change
+  React.useEffect(() => {
+    const newNodes: Node[] = positions.map((position, index) => {
+      const assignedPersonnel = getPersonnelForPosition(position.id);
+      const employeeNames = assignedPersonnel.length > 0 
+        ? assignedPersonnel.map(p => p.name).join(', ')
+        : 'تخصیص نیافته';
+        
+      return {
+        id: position.id.toString(),
+        type: 'position',
+        position: { 
+          x: (index % 3) * 250 + 50, 
+          y: Math.floor(index / 3) * 150 + 50 
+        },
+        data: {
+          name: position.name,
+          employee: employeeNames,
+          department: position.department,
+          isManager: position.name.includes('مدیر'),
+          positionId: position.id
+        },
+      };
+    });
+    setNodes(newNodes);
+  }, [positions, personnel]);
+
+  // Update edges when positions change
+  React.useEffect(() => {
+    const newEdges: Edge[] = positions
+      .filter(pos => pos.parentPosition)
+      .map(pos => {
+        const parentPos = positions.find(p => p.name === pos.parentPosition);
+        if (parentPos) {
+          return {
+            id: `e${parentPos.id}-${pos.id}`,
+            source: parentPos.id.toString(),
+            target: pos.id.toString(),
+            type: 'smoothstep',
+            animated: false,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean) as Edge[];
+    setEdges(newEdges);
+  }, [positions]);
+
+  const onConnect = useCallback(
+    (params: Connection) => {
+      // When user connects two nodes, update the parent-child relationship
+      const sourcePosition = positions.find(p => p.id.toString() === params.source);
+      const targetPosition = positions.find(p => p.id.toString() === params.target);
+      
+      if (sourcePosition && targetPosition && onPositionsUpdate) {
+        const updatedPositions = positions.map(pos => 
+          pos.id === targetPosition.id 
+            ? { ...pos, parentPosition: sourcePosition.name }
+            : pos
+        );
+        onPositionsUpdate(updatedPositions);
       }
-      return null;
-    })
-    .filter(Boolean) as Edge[];
+      
+      setEdges((eds) => addEdge(params, eds));
+    },
+    [positions, onPositionsUpdate]
+  );
+
 
   return (
     <div className="h-[600px] w-full border rounded-lg">
@@ -112,10 +159,18 @@ export const OrganizationalChart: React.FC<OrganizationalChartProps> = ({
         <ReactFlow
           nodes={nodes}
           edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
           className="bg-gray-50"
           dir="rtl"
+          connectionLineType={ConnectionLineType.SmoothStep}
+          defaultEdgeOptions={{
+            type: 'smoothstep',
+            animated: false,
+          }}
         >
           <Controls />
           <MiniMap />
