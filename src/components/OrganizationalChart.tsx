@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, Edit } from "lucide-react";
+import { Plus, Trash2, Edit, Building } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Custom node component for organizational positions
@@ -51,24 +51,14 @@ const nodeTypes = {
 
 interface OrganizationalChartProps {
   positions: any[];
-  onPositionsUpdate: (positions: any[]) => void;
+  onPositionsUpdate?: (positions: any[]) => void;
 }
 
 export const OrganizationalChart: React.FC<OrganizationalChartProps> = ({ 
-  positions, 
-  onPositionsUpdate 
+  positions 
 }) => {
-  const { toast } = useToast();
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [newPosition, setNewPosition] = useState({
-    name: '',
-    department: '',
-    employee: '',
-    isManager: false
-  });
-
   // Convert positions to nodes
-  const initialNodes: Node[] = positions.map((position, index) => ({
+  const nodes: Node[] = positions.map((position, index) => ({
     id: position.id.toString(),
     type: 'position',
     position: { 
@@ -77,15 +67,15 @@ export const OrganizationalChart: React.FC<OrganizationalChartProps> = ({
     },
     data: {
       name: position.name,
-      employee: position.assignedEmployee,
+      employee: 'مراجعه به تب پرسنل',
       department: position.department,
       isManager: position.name.includes('مدیر')
     },
   }));
 
   // Create edges based on parent-child relationships
-  const initialEdges: Edge[] = positions
-    .filter(pos => pos.parentPosition && pos.parentPosition !== 'بدون گزارش‌دهی')
+  const edges: Edge[] = positions
+    .filter(pos => pos.parentPosition)
     .map(pos => {
       const parentPos = positions.find(p => p.name === pos.parentPosition);
       if (parentPos) {
@@ -101,157 +91,37 @@ export const OrganizationalChart: React.FC<OrganizationalChartProps> = ({
     })
     .filter(Boolean) as Edge[];
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
-  );
-
-  const handleAddPosition = () => {
-    if (!newPosition.name || !newPosition.department) {
-      toast({
-        title: "خطا",
-        description: "لطفا نام پست و بخش را وارد کنید",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const newId = Math.max(...positions.map(p => p.id), 0) + 1;
-    const newPos = {
-      id: newId,
-      name: newPosition.name,
-      department: newPosition.department,
-      assignedEmployee: newPosition.employee || "تخصیص نیافته",
-      routineTasks: 0,
-      parentPosition: "بدون گزارش‌دهی"
-    };
-
-    const updatedPositions = [...positions, newPos];
-    onPositionsUpdate(updatedPositions);
-
-    // Add new node to the chart
-    const newNode: Node = {
-      id: newId.toString(),
-      type: 'position',
-      position: { 
-        x: (positions.length % 3) * 250 + 50, 
-        y: Math.floor(positions.length / 3) * 150 + 50 
-      },
-      data: {
-        name: newPosition.name,
-        employee: newPosition.employee || "تخصیص نیافته",
-        department: newPosition.department,
-        isManager: newPosition.isManager
-      },
-    };
-
-    setNodes((nds) => [...nds, newNode]);
-    setNewPosition({ name: '', department: '', employee: '', isManager: false });
-    setIsAddDialogOpen(false);
-
-    toast({
-      title: "موفقیت",
-      description: "پست جدید به چارت سازمانی اضافه شد",
-    });
-  };
-
-  const handleDeleteNode = (nodeId: string) => {
-    setNodes((nds) => nds.filter((n) => n.id !== nodeId));
-    setEdges((eds) => eds.filter((e) => e.source !== nodeId && e.target !== nodeId));
-    
-    const updatedPositions = positions.filter(p => p.id.toString() !== nodeId);
-    onPositionsUpdate(updatedPositions);
-
-    toast({
-      title: "حذف شد",
-      description: "پست از چارت سازمانی حذف شد",
-    });
-  };
-
   return (
     <div className="h-[600px] w-full border rounded-lg">
       <div className="flex justify-between items-center p-4 border-b">
-        <h3 className="text-lg font-semibold">چارت سازمانی داینامیک</h3>
-        <div className="flex gap-2">
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                افزودن پست
-              </Button>
-            </DialogTrigger>
-            <DialogContent dir="rtl">
-              <DialogHeader>
-                <DialogTitle>افزودن پست جدید</DialogTitle>
-                <DialogDescription>
-                  پست جدید را به چارت سازمانی اضافه کنید
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="positionName">نام پست</Label>
-                  <Input
-                    id="positionName"
-                    value={newPosition.name}
-                    onChange={(e) => setNewPosition({...newPosition, name: e.target.value})}
-                    placeholder="مثلاً مدیر فروش"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="department">بخش</Label>
-                  <Select 
-                    value={newPosition.department} 
-                    onValueChange={(value) => setNewPosition({...newPosition, department: value})}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="انتخاب بخش" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="تولید">تولید</SelectItem>
-                      <SelectItem value="کیفیت">کیفیت</SelectItem>
-                      <SelectItem value="تعمیرات">تعمیرات</SelectItem>
-                      <SelectItem value="اداری">اداری</SelectItem>
-                      <SelectItem value="فروش">فروش</SelectItem>
-                      <SelectItem value="مالی">مالی</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="employee">نام کارمند</Label>
-                  <Input
-                    id="employee"
-                    value={newPosition.employee}
-                    onChange={(e) => setNewPosition({...newPosition, employee: e.target.value})}
-                    placeholder="نام کارمند تخصیص یافته"
-                  />
-                </div>
-                <Button onClick={handleAddPosition} className="w-full">
-                  افزودن پست
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+        <h3 className="text-lg font-semibold">چارت سازمانی</h3>
+        <p className="text-muted-foreground text-sm">
+          برای اضافه کردن پست جدید از تب پست‌های سازمانی استفاده کنید
+        </p>
       </div>
       
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        fitView
-        className="bg-gray-50"
-        dir="rtl"
-      >
-        <Controls />
-        <MiniMap />
-        <Background />
-      </ReactFlow>
+      {positions.length === 0 ? (
+        <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className="text-center">
+            <Building className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>چارت سازمانی خالی است</p>
+            <p className="text-sm">ابتدا پست‌های سازمانی را تعریف کنید</p>
+          </div>
+        </div>
+      ) : (
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          fitView
+          className="bg-gray-50"
+          dir="rtl"
+        >
+          <Controls />
+          <MiniMap />
+          <Background />
+        </ReactFlow>
+      )}
     </div>
   );
 };

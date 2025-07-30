@@ -18,6 +18,7 @@ const Organization = () => {
   
   // Dialog states
   const [isPositionDialogOpen, setIsPositionDialogOpen] = useState(false);
+  const [isPersonnelDialogOpen, setIsPersonnelDialogOpen] = useState(false);
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
   
   // Form states
@@ -25,6 +26,13 @@ const Organization = () => {
     name: "",
     department: "",
     reportsTo: ""
+  });
+
+  const [newPersonnelForm, setNewPersonnelForm] = useState({
+    name: "",
+    positionId: "",
+    email: "",
+    phone: ""
   });
   
   const [newTaskForm, setNewTaskForm] = useState({
@@ -34,9 +42,9 @@ const Organization = () => {
     description: ""
   });
 
-  // Start with empty arrays - only user-added items will show
+  // Separate data structures
   const [positions, setPositions] = useState([]);
-
+  const [personnel, setPersonnel] = useState([]);
   const [routineTasks, setRoutineTasks] = useState([]);
 
   // Handler functions
@@ -51,12 +59,10 @@ const Organization = () => {
     }
 
     const newPosition = {
-      id: positions.length + 1,
+      id: Date.now(),
       name: newPositionForm.name,
       department: newPositionForm.department,
-      assignedEmployee: "تخصیص نیافته",
-      routineTasks: 0,
-      parentPosition: newPositionForm.reportsTo || "بدون گزارش‌دهی"
+      parentPosition: newPositionForm.reportsTo || null
     };
 
     setPositions([...positions, newPosition]);
@@ -66,6 +72,34 @@ const Organization = () => {
     toast({
       title: "موفقیت",
       description: "پست جدید با موفقیت ایجاد شد",
+    });
+  };
+
+  const handleCreatePersonnel = () => {
+    if (!newPersonnelForm.name || !newPersonnelForm.positionId) {
+      toast({
+        title: "خطا",
+        description: "لطفا نام و پست را انتخاب کنید",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newPerson = {
+      id: Date.now(),
+      name: newPersonnelForm.name,
+      positionId: parseInt(newPersonnelForm.positionId),
+      email: newPersonnelForm.email,
+      phone: newPersonnelForm.phone
+    };
+
+    setPersonnel([...personnel, newPerson]);
+    setNewPersonnelForm({ name: "", positionId: "", email: "", phone: "" });
+    setIsPersonnelDialogOpen(false);
+    
+    toast({
+      title: "موفقیت",
+      description: "پرسنل جدید با موفقیت اضافه شد",
     });
   };
 
@@ -115,6 +149,8 @@ const Organization = () => {
   const handleAddNew = () => {
     if (activeTab === "positions") {
       setIsPositionDialogOpen(true);
+    } else if (activeTab === "personnel") {
+      setIsPersonnelDialogOpen(true);
     } else if (activeTab === "tasks") {
       setIsTaskDialogOpen(true);
     } else {
@@ -123,6 +159,11 @@ const Organization = () => {
         description: "برای افزودن موارد جدید از تب‌های مربوطه استفاده کنید",
       });
     }
+  };
+
+  // Helper function to get personnel assigned to a position
+  const getPersonnelForPosition = (positionId) => {
+    return personnel.filter(p => p.positionId === positionId);
   };
 
   return (
@@ -147,6 +188,14 @@ const Organization = () => {
           >
             <Building className="h-4 w-4" />
             پست‌های سازمانی
+          </Button>
+          <Button
+            variant={activeTab === "personnel" ? "default" : "ghost"}
+            onClick={() => setActiveTab("personnel")}
+            className="flex items-center gap-2"
+          >
+            <UserCheck className="h-4 w-4" />
+            پرسنل
           </Button>
           <Button
             variant={activeTab === "tasks" ? "default" : "ghost"}
@@ -201,20 +250,23 @@ const Organization = () => {
                         <TableCell>
                           <Badge variant="outline">{position.department}</Badge>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <UserCheck className="h-4 w-4 text-muted-foreground" />
-                            {position.assignedEmployee}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {position.parentPosition}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">
-                            {position.routineTasks} وظیفه
-                          </Badge>
-                        </TableCell>
+                         <TableCell>
+                           <div className="flex items-center gap-2">
+                             <UserCheck className="h-4 w-4 text-muted-foreground" />
+                             {getPersonnelForPosition(position.id).length > 0 
+                               ? getPersonnelForPosition(position.id).map(p => p.name).join(', ')
+                               : 'تخصیص نیافته'
+                             }
+                           </div>
+                         </TableCell>
+                         <TableCell className="text-sm text-muted-foreground">
+                           {position.parentPosition || 'بدون گزارش‌دهی'}
+                         </TableCell>
+                         <TableCell>
+                           <Badge variant="secondary">
+                             {routineTasks.filter(t => t.position === position.name).length} وظیفه
+                           </Badge>
+                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Button 
@@ -316,6 +368,81 @@ const Organization = () => {
                         </TableCell>
                       </TableRow>
                     ))}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === "personnel" && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <UserCheck className="h-5 w-5" />
+                پرسنل
+              </CardTitle>
+              <CardDescription>مدیریت کارکنان و تخصیص آن‌ها به پست‌های سازمانی</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {personnel.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <UserCheck className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>هنوز هیچ پرسنلی اضافه نشده است</p>
+                  <p className="text-sm">برای شروع، پرسنل جدید اضافه کنید</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-right">نام</TableHead>
+                      <TableHead className="text-right">پست</TableHead>
+                      <TableHead className="text-right">ایمیل</TableHead>
+                      <TableHead className="text-right">تلفن</TableHead>
+                      <TableHead className="text-right">عملیات</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {personnel.map((person) => {
+                      const position = positions.find(p => p.id === person.positionId);
+                      return (
+                        <TableRow key={person.id}>
+                          <TableCell className="font-medium">{person.name}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline">
+                              {position ? position.name : 'پست نامشخص'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {person.email || '-'}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {person.phone || '-'}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Button variant="ghost" size="sm">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => {
+                                  setPersonnel(personnel.filter(p => p.id !== person.id));
+                                  toast({
+                                    title: "حذف پرسنل",
+                                    description: `${person.name} حذف شد`,
+                                    variant: "destructive"
+                                  });
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               )}
@@ -447,6 +574,64 @@ const Organization = () => {
                 />
               </div>
               <Button onClick={handleCreateTask} className="w-full">ایجاد وظیفه</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Personnel Creation Dialog */}
+        <Dialog open={isPersonnelDialogOpen} onOpenChange={setIsPersonnelDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]" dir="rtl">
+            <DialogHeader>
+              <DialogTitle>اضافه کردن پرسنل</DialogTitle>
+              <DialogDescription>
+                افزودن کارمند جدید و تخصیص به پست
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div>
+                <Label htmlFor="personnelName">نام کارمند</Label>
+                <Input 
+                  id="personnelName" 
+                  placeholder="نام و نام خانوادگی"
+                  value={newPersonnelForm.name}
+                  onChange={(e) => setNewPersonnelForm({...newPersonnelForm, name: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="assignPosition">انتخاب پست</Label>
+                <Select value={newPersonnelForm.positionId} onValueChange={(value) => setNewPersonnelForm({...newPersonnelForm, positionId: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="انتخاب پست" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {positions.map((position) => (
+                      <SelectItem key={position.id} value={position.id.toString()}>
+                        {position.name} - {position.department}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="email">ایمیل</Label>
+                <Input 
+                  id="email" 
+                  type="email"
+                  placeholder="email@example.com"
+                  value={newPersonnelForm.email}
+                  onChange={(e) => setNewPersonnelForm({...newPersonnelForm, email: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="phone">تلفن</Label>
+                <Input 
+                  id="phone" 
+                  placeholder="شماره تلفن"
+                  value={newPersonnelForm.phone}
+                  onChange={(e) => setNewPersonnelForm({...newPersonnelForm, phone: e.target.value})}
+                />
+              </div>
+              <Button onClick={handleCreatePersonnel} className="w-full">اضافه کردن پرسنل</Button>
             </div>
           </DialogContent>
         </Dialog>
